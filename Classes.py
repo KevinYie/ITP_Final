@@ -142,5 +142,5 @@ class MainWindow(Authenticator):
         root.mainloop()
 
 
-# Authenticator("")
-main = MainWindow()
+Authenticator("")
+# main = MainWindow()
