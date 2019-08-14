@@ -1,5 +1,6 @@
 from tkinter import *
 import pickle
+import os
 
 
 class Authenticator():
@@ -78,16 +79,19 @@ class Authenticator():
         elif message == "main window":
             main = MainWindow()
             main.loadUp()
+        elif message == "close":
+            self.root.destroy()
         else:
             self.errorMessage = Label(frame, text="{}".format(message), fg="red",
                                       font=("Times New Roman", 12))
             self.errorMessage.grid(row=2, columnspan=3)
 
-
-
         self.root.mainloop()
 
     # Functions for authenticator
+
+    def success(self):
+        return self.userEntry.get()
 
     def authenticate(self):
 
@@ -128,16 +132,21 @@ class Authenticator():
 
 
 ## TODO create different lists of Text object for each account. Will have to add function into MainWindow that takes username and password as arguments and use string formatting to open correct pickle list
-class MainWindow(Authenticator):
-
+class MainWindow:
     def __init__(self):
-        Authenticator.__init__(self, "main window")
+        self.authenticatorClass = Authenticator("close")
+        self.account = self.authenticatorClass.success()
 
     # Function to create window
     def loadUp(self):
+        try:
+            os.mkdir("{}".format(self.account))
+        except OSError:
+            pass
+
         root = Tk()
-        root.title("Home")
-        root.geometry("300x300")
+
+
 
         root.mainloop()
 
