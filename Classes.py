@@ -2,6 +2,7 @@ from tkinter import *
 import tkinter.messagebox as box
 import pickle
 import os
+import datetime
 
 
 class Authenticator:
@@ -132,8 +133,6 @@ class Authenticator:
             Authenticator("creation success")
 
 
-
-## TODO create different lists of Text object for each account. Will have to add function into MainWindow that takes username and password as arguments and use string formatting to open correct pickle list
 class MainWindow:
     def __init__(self):
         self.account = account
@@ -146,26 +145,80 @@ class MainWindow:
         except OSError:
             pass
 
+        # Setting directory
         os.chdir("{}/{}".format(os.getcwd(), self.account))
-        root = Tk()
-        frame = Frame(root)
-        frame.pack()
+
+        # Creating list out of directory
         files = os.listdir("{}".format(os.getcwd()))
-        listbox = Listbox(frame)
+
+        root = Tk()
+
+        # Setting window dimensions
+        root.title('Forever Note')
+        root.geometry("450x300")
+        root.resizable(0, 0)
+
+        # Creating frames and properties
+        leftFrame = Frame(root, width=350, height=400)
+        leftFrame.pack(side=LEFT, fill=None, expand=False)
+        leftFrame.pack_propagate(0)
+        rightFrame = Frame(root, width=100, height=50)
+        rightFrame.place(relx=.9, rely=.5, anchor="c")
+        rightFrame.pack_propagate(0)
+
+        # Formatting Window
+        recentLabel = Label(leftFrame, text="All Files", font=("Times New Roman", 16))
+        recentLabel.pack()
+
+        listbox = Listbox(leftFrame, height=100, width=100)
         for i in range(0, len(files)):
             listbox.insert(i, files[i])
+        listbox.pack(side=BOTTOM)
 
         def openFile():
-            textWidget = Text(frame, width = 100)
-            with open(listbox.get( listbox.curselection() ), 'r') as note:
+            textWidget = Text(leftFrame, width=100)
+            with open(listbox.get(listbox.curselection()), 'r') as note:
                 textWidget.insert(INSERT, note.read())
-            textWidget.pack()
+            textWidget.pack(side=BOTTOM)
 
-        openButton = Button(frame, text='View Note', command=openFile)
-        openButton.pack()
-        listbox.pack()
+        viewButton = Button(rightFrame, text='View Note', command=openFile)
+        viewButton.pack(side=TOP)
+
+        def newNote():
+            textWindow = Tk()
+
+            textWindow.title("New Note")
+            textWindow.geometry("200x200")
+            textWindow.resizable(0, 0)
+
+            lframe = Frame(textWindow, width=150, height=200)
+            lframe.pack(side=LEFT, fill=None, expand=False)
+            lframe.pack_propagate(0)
+            rframe = Frame(textWindow, width=50, height=200)
+            rframe.pack(side=RIGHT, fill=None, expand=False)
+            rframe.pack_propagate(0)
+
+            userText = Text(lframe)
+            userText.pack()
+
+            def save():
+                textOut = open("{}.txt".format(datetime.datetime.now().strftime("%Y%m%d%H%M")), "w+")
+                textOut.write(userText.get("1.0", END))
+                textOut.close()
+
+                temp = Tk()
+                temp.withdraw()
+                box.showinfo("Saved", "Your note was saved")
+
+            saveButton = Button(rframe, text="Save", command=save)
+            saveButton.pack()
+
+            textWindow.mainloop()
+
+        addButton = Button(rightFrame, text="New Note", command=newNote)
+        addButton.pack()
+
         root.mainloop()
-
 
 
 account = ""

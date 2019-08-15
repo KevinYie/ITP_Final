@@ -1,5 +1,6 @@
 import os
 from tkinter import *
 import tkinter.messagebox as box
+import datetime
 
-box.showinfo("Account Creation Successful", "Your account has been successfully created!")
+open("random.txt", "w+")
