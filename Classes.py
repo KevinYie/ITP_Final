@@ -6,6 +6,8 @@ import os
 import datetime
 
 
+
+# Setting up Authenticator class
 class Authenticator:
 
     def __init__(self, message):
@@ -147,6 +149,12 @@ class Authenticator:
             self.root.destroy()
 
             Authenticator("creation success")
+
+
+
+
+
+
 
 
 # Class for Main Window. Takes global variable account and sets it to self to specify user
