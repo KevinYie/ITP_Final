@@ -1,4 +1,5 @@
 from tkinter import *
+import tkinter.messagebox as box
 import pickle
 import os
 
@@ -52,25 +53,9 @@ class Authenticator:
 
         if message == "success":
             self.root.destroy()
-
-            buffer = Tk()
-
-            # Sets the window in the middle of screen
-            windowWidth = buffer.winfo_reqwidth()
-            windowHeight = buffer.winfo_reqheight()
-            positionRight = int(buffer.winfo_screenwidth() / 2 - windowWidth / 2)
-            positionDown = int(buffer.winfo_screenheight() / 2 - windowHeight / 2)
-            buffer.geometry("+{}+{}".format(positionRight, positionDown))
-
-            bufferFrame = Frame(buffer)
-            bufferFrame.pack()
-
-            bufferMessage = Label(bufferFrame, text="Your account has been created. \n You will be redirected shortly!",
-                                  font=("Times New Roman", 18), fg="green")
-            bufferMessage.pack()
-
-            buffer.after(5000, lambda: buffer.destroy())
-            buffer.mainloop()
+            temp = Tk()
+            temp.withdraw()
+            box.showinfo("Account Creation Successful", "Your account has been successfully created!")
 
             MainWindow()
 
@@ -143,12 +128,26 @@ class MainWindow:
         try:
             os.mkdir("{}".format(self.account))
         except OSError:
-            print("os error")
+            pass
 
+        os.chdir("{}/{}".format(os.getcwd(), self.account))
         root = Tk()
+        frame = Frame(root)
+        frame.pack()
+        files = os.listdir("{}".format(os.getcwd()))
+        listbox = Listbox(frame)
+        for i in range(0, len(files)):
+            listbox.insert(i, files[i])
 
+        def openFile():
+            textWidget = Text(frame, width = 100)
+            with open(listbox.get( listbox.curselection() ), 'r') as note:
+                textWidget.insert(INSERT, note.read())
+            textWidget.pack()
 
-
+        openButton = Button(frame, text='View Note', command=openFile)
+        openButton.pack()
+        listbox.pack()
         root.mainloop()
 
 
