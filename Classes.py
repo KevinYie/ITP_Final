@@ -176,10 +176,14 @@ class MainWindow:
         listbox.pack(side=BOTTOM)
 
         def openFile():
-            textWidget = Text(leftFrame, width=100)
+            viewWindow = Tk()
+            viewFrame = Frame(viewWindow)
+            viewFrame.pack()
+            textWidget = Text(viewFrame, width=100)
             with open(listbox.get(listbox.curselection()), 'r') as note:
                 textWidget.insert(INSERT, note.read())
-            textWidget.pack(side=BOTTOM)
+            textWidget.pack()
+            viewWindow.mainloop()
 
         viewButton = Button(rightFrame, text='View Note', command=openFile)
         viewButton.pack(side=TOP)
