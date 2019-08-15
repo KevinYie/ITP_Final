@@ -31,6 +31,11 @@ class Authenticator:
         positionDown = int(self.root.winfo_screenheight() / 2 - windowHeight / 2)
         self.root.geometry("+{}+{}".format(positionRight, positionDown))
 
+        # Sets the dimensions of the window
+        self.root.title('Authenticator')
+        self.root.geometry("275x150")
+        self.root.resizable(0, 0)
+
         # Creates the frame
         frame = Frame(self.root, width=600, height=300)
         frame.pack()
@@ -60,6 +65,7 @@ class Authenticator:
         self.gifLabel2 = Label(frame, image=self.gif2)
         self.gifLabel2.grid(row=4, column=1)
 
+        # Message boxes depending on message argument
         if message == "creation success":
             self.root.destroy()
             temp = Tk()
@@ -94,6 +100,7 @@ class Authenticator:
 
     # Functions for authenticator
 
+    # Checks if username and password match in the pickled dictionary
     def authenticate(self):
 
         enteredUser = self.userEntry.get()
@@ -117,7 +124,7 @@ class Authenticator:
 
 
 
-
+    # Checks if username exists in dictionary. If it does, return error
     def createUser(self):
         enteredUser = self.userEntry.get()
         enteredUser = str(enteredUser)
@@ -141,12 +148,13 @@ class Authenticator:
             Authenticator("creation success")
 
 
+# Class for Main Window. Takes global variable account and sets it to self to specify user
 class MainWindow:
     def __init__(self):
         self.account = account
         self.loadUp()
+        
     # Function to create window
-
     def loadUp(self):
         try:
             os.mkdir("{}".format(self.account))
@@ -178,11 +186,13 @@ class MainWindow:
         recentLabel = Label(leftFrame, text="All Files", font=("Arial", 16))
         recentLabel.pack()
 
+        # Creates list of all files in directory
         listbox = Listbox(leftFrame, height=100, width=100)
         for i in range(0, len(files)):
             listbox.insert(i, files[i])
         listbox.pack(side=BOTTOM)
 
+        # Views the hovered file
         def openFile():
             viewWindow = Tk()
             viewFrame = Frame(viewWindow)
@@ -196,6 +206,7 @@ class MainWindow:
         viewButton = Button(rightFrame, text='View Note', command=openFile)
         viewButton.pack(side=TOP)
 
+        # Opens a text window to enter new note
         def newNote():
             textWindow = Tk()
 
@@ -213,6 +224,7 @@ class MainWindow:
             userText = Text(lframe)
             userText.pack()
 
+            # Writes a text file using date and time as title
             def save():
                 textOut = open("{}.txt".format(datetime.datetime.now().strftime("%Y%m%d%H%M")), "w+")
                 textOut.write(userText.get("1.0", END))
