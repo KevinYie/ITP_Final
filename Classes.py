@@ -51,7 +51,7 @@ class Authenticator:
         self.newUserButton = Button(frame, text="Create New Account", command=self.createUser)
         self.newUserButton.grid(row=3, column=1)
 
-        if message == "success":
+        if message == "creation success":
             self.root.destroy()
             temp = Tk()
             temp.withdraw()
@@ -59,17 +59,27 @@ class Authenticator:
 
             MainWindow()
 
+        elif message == "success":
+            self.root.destroy()
+            temp = Tk()
+            temp.withdraw()
+            box.showinfo("Successful Login", "Login Successful!")
+
+            MainWindow()
+
         elif message == "":
             pass
+
         elif message == "main window":
             main = MainWindow()
             main.loadUp()
+
         else:
-            self.errorMessage = Label(frame, text="{}".format(message), fg="red",
-                                      font=("Times New Roman", 12))
-            self.errorMessage.grid(row=2, columnspan=3)
-
-
+            self.root.destroy()
+            temp = Tk()
+            temp.withdraw()
+            box.showinfo("Error", message)
+            Authenticator("")
 
         self.root.mainloop()
 
@@ -86,6 +96,7 @@ class Authenticator:
             if str(enteredPassword) == str(self.accounts[enteredUser]):
                 global account
                 account = str(self.userEntry.get())
+
                 self.root.destroy()
                 Authenticator("success")
             else:
@@ -112,8 +123,13 @@ class Authenticator:
             pickle_out = open("accounts.pickle", "wb")
             pickle.dump(self.accounts, pickle_out)
             pickle_out.close()
+
+            global account
+            account = str(self.userEntry.get())
+
             self.root.destroy()
-            Authenticator("success")
+
+            Authenticator("creation success")
 
 
 
