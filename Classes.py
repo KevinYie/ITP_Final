@@ -3,7 +3,7 @@ import pickle
 import os
 
 
-class Authenticator():
+class Authenticator:
 
     def __init__(self, message):
 
@@ -79,19 +79,16 @@ class Authenticator():
         elif message == "main window":
             main = MainWindow()
             main.loadUp()
-        elif message == "close":
-            self.root.destroy()
         else:
             self.errorMessage = Label(frame, text="{}".format(message), fg="red",
                                       font=("Times New Roman", 12))
             self.errorMessage.grid(row=2, columnspan=3)
 
+
+
         self.root.mainloop()
 
     # Functions for authenticator
-
-    def success(self):
-        return self.userEntry.get()
 
     def authenticate(self):
 
@@ -102,7 +99,10 @@ class Authenticator():
 
         if enteredUser in list(self.accounts.keys()):
             if str(enteredPassword) == str(self.accounts[enteredUser]):
-                MainWindow()
+                global account
+                account = str(self.userEntry.get())
+                self.root.destroy()
+                Authenticator("success")
             else:
                 self.root.destroy()
                 Authenticator("The username you entered does not exist")
@@ -131,18 +131,19 @@ class Authenticator():
             Authenticator("success")
 
 
+
 ## TODO create different lists of Text object for each account. Will have to add function into MainWindow that takes username and password as arguments and use string formatting to open correct pickle list
 class MainWindow:
     def __init__(self):
-        self.authenticatorClass = Authenticator("close")
-        self.account = self.authenticatorClass.success()
-
+        self.account = account
+        self.loadUp()
     # Function to create window
+
     def loadUp(self):
         try:
             os.mkdir("{}".format(self.account))
         except OSError:
-            pass
+            print("os error")
 
         root = Tk()
 
@@ -151,5 +152,6 @@ class MainWindow:
         root.mainloop()
 
 
-# Authenticator("")
-main = MainWindow()
+
+account = ""
+Authenticator("")
