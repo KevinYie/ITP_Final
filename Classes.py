@@ -52,6 +52,14 @@ class Authenticator:
         self.newUserButton = Button(frame, text="Create New Account", command=self.createUser)
         self.newUserButton.grid(row=3, column=1)
 
+        self.gif = PhotoImage(file="chick.png")
+        self.gifLabel = Label(frame, image=self.gif)
+        self.gifLabel.grid(row=4, column=0)
+
+        self.gif2 = PhotoImage(file="chick.png")
+        self.gifLabel2 = Label(frame, image=self.gif2)
+        self.gifLabel2.grid(row=4, column=1)
+
         if message == "creation success":
             self.root.destroy()
             temp = Tk()
@@ -167,7 +175,7 @@ class MainWindow:
         rightFrame.pack_propagate(0)
 
         # Formatting Window
-        recentLabel = Label(leftFrame, text="All Files", font=("Times New Roman", 16))
+        recentLabel = Label(leftFrame, text="All Files", font=("Arial", 16))
         recentLabel.pack()
 
         listbox = Listbox(leftFrame, height=100, width=100)
